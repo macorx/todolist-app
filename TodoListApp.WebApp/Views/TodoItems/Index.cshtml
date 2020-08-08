@@ -1,0 +1,13 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "TodoList";
+}
+
+@inject UserManager<IdentityUser> UserManager
+
+<h1>Hello @UserManager.GetUserName(User)!</h1>
+
+<form id="logoutForm" class="form-inline" asp-controller="Account" asp-action="Logout">
+    <button id="logout" type="submit"  class="btn btn-primary">Logout</button>
+</form>
+
