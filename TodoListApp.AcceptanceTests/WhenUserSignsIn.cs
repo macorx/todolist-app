@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 
 namespace TodoListApp.AcceptanceTests
 {
@@ -8,17 +7,13 @@ namespace TodoListApp.AcceptanceTests
         [Test]
         public void DisplaysUsersTodoListAndSignsOut()
         {
-            Driver.FindElement(By.CssSelector("input#UserName")).SendKeys("test");
-            Driver.FindElement(By.CssSelector("input#Password")).SendKeys("pwd123");
-            Driver.FindElement(By.CssSelector("button#login")).Submit();
-            
-            Driver.WaitUntilPageIsReady();
-            
+            AuthenticateWithDefaultUser();
+
             Assert.That(Driver.Url, Is.EqualTo($"{BasePath}/"));
-            
-            Driver.FindElement(By.CssSelector("button#logout")).Submit();
-            
-            Assert.That(Driver.Url, Is.EqualTo(LoginUrl));            
+
+            ClickOn("logout");
+
+            Assert.That(Driver.Url, Is.EqualTo(LoginUrl));
         }
     }
 }
