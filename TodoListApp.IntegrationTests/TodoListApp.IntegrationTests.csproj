@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TodoListApp.UnitTests\TodoListApp.UnitTests.csproj" />
       <ProjectReference Include="..\TodoListApp.WebApp\TodoListApp.WebApp.csproj" />
     </ItemGroup>
 

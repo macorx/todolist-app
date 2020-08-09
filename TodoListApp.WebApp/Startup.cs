@@ -16,6 +16,8 @@ namespace TodoListApp.WebApp
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("TodoList"));
+            
+            services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 
             // options => options.SignIn.RequireConfirmedAccount = true
             services

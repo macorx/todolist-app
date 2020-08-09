@@ -14,9 +14,11 @@ namespace TodoListApp.AcceptanceTests
         [Test]
         public void UserCanAddItemToHisTodoList()
         {
+            ClickOnLink("add");
+
             const string itemDescription = "Review notes from last meeting.";
             FillInput("Description",itemDescription);
-            ClickOn("Add");
+            ClickOnButton("add");
 
             var items = Driver.FindElements(By.CssSelector("table tbody tr"));
             
@@ -25,8 +27,8 @@ namespace TodoListApp.AcceptanceTests
 
             Assert.That(todoItem.State, Is.EqualTo("Pending"));            
             Assert.That(todoItem.Description, Is.EqualTo(itemDescription));            
-            Assert.That(todoItem.DateOfCreation, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(2)));
-            Assert.That(todoItem.DateOfLastUpdate, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(2)));
+            Assert.That(todoItem.DateOfCreation, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromMinutes(1)));
+            Assert.IsNull(todoItem.DateOfLastUpdate);
 
         }
     }

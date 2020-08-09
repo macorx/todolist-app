@@ -6,7 +6,7 @@ namespace TodoListApp.AcceptanceTests
 {
     public static class WebDriverExtensions
     {
-        private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(2);
         
         public static void WaitUntilPageIsReady(this IWebDriver driver)
         {

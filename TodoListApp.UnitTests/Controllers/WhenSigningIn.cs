@@ -9,7 +9,7 @@ using TodoListApp.WebApp.Controllers;
 using TodoListApp.WebApp.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace TodoListApp.UnitTests
+namespace TodoListApp.UnitTests.Controllers
 {
     public class WhenSigningIn
     {

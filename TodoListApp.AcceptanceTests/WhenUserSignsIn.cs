@@ -11,7 +11,7 @@ namespace TodoListApp.AcceptanceTests
 
             Assert.That(Driver.Url, Is.EqualTo($"{BasePath}/"));
 
-            ClickOn("logout");
+            ClickOnButton("logout");
 
             Assert.That(Driver.Url, Is.EqualTo(LoginUrl));
         }

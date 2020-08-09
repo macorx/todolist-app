@@ -6,12 +6,32 @@
     <title>TodoList - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="~/css/mvc-grid/mvc-grid.css">    
 </head>
 <body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="TodoItems" asp-action="Index">TodoList App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial"/>
+            </div>
+        </div>
+    </nav>
+</header>
 <div class="container">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
+
+    <script src="~/js/mvc-grid/mvc-grid.js"></script>
+    <script>
+       document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>    
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

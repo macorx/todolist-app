@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 
@@ -14,11 +15,16 @@ namespace TodoListApp.AcceptanceTests
         [SetUp]
         public void Setup()
         {
-            // Not recommended to use flag AcceptInsecureCertificates. However, I decided to switch on the flag to save time. 
-            Driver = new FirefoxDriver(new FirefoxOptions() { AcceptInsecureCertificates = true });
+            var service = FirefoxDriverService.CreateDefaultService();
+            service.Host = "::1";
+
+            // Not recommended to use flag AcceptInsecureCertificates. However, I decided to switch on the flag to save time.
+            var options = new FirefoxOptions() {  AcceptInsecureCertificates = true };
+
+            Driver = new FirefoxDriver(service, options);
             Driver.Navigate().GoToUrl(LoginUrl);
             Driver.WaitUntilPageIsReady();
-
+            
             AdditionalSetup();
         }
 
@@ -26,19 +32,23 @@ namespace TodoListApp.AcceptanceTests
         {
             FillInput("UserName","test");
             FillInput("Password","pwd123");
-            ClickOn("login");
+            ClickOnButton("login");
             
             Driver.WaitUntilPageIsReady();
         }
 
         protected void FillInput(string id, string text)
         {
-            Driver.FindElement(By.CssSelector($"input#{id}")).SendKeys($"{text}");
+            Driver.FindElement(By.Id(id)).SendKeys($"{text}");
         }
 
-        protected void ClickOn(string id)
+        protected void ClickOnButton(string id)
         {
-            Driver.FindElement(By.CssSelector($"button#{id}")).Submit();            
+            Driver.FindElement(By.Id(id)).Submit();            
+        }
+        protected void ClickOnLink(string id)
+        {
+            Driver.FindElement(By.Id(id)).Click();           
         }
 
         protected virtual void AdditionalSetup()

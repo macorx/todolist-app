@@ -5,23 +5,15 @@ using TodoListApp.WebApp;
 
 namespace TodoListApp.IntegrationTests
 {
-    public class StartupTest
+    public class StartupTest : IntegrationTestBase
     {
-        private WebApplicationFactory<Startup> factory;
-
-        [SetUp]
-        public void Setup()
-        {
-            factory = new WebApplicationFactory<Startup>();
-        }
-        
         [TestCase("/Account/Login")]
         [TestCase("/Identity/Account/Login")]
         [TestCase("/TodoItems")]
         [TestCase("/")]
         public async Task ReturnsViewForUrl(string url)
         {
-            var client = factory.CreateClient();
+            var client = Factory.CreateClient();
 
             var response = await client.GetAsync(url);
             

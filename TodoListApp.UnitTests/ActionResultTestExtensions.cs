@@ -7,7 +7,7 @@ namespace TodoListApp.UnitTests
     {
         public static T As<T>(this object obj)
         {
-            Assert.IsInstanceOf<T>(obj);
+            Assert.IsInstanceOf<T>(obj,$"Object is not of type {typeof(T).Name}");
             return (T) obj;
         }
     }

@@ -10,6 +10,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
+        <PackageReference Include="NonFactors.Grid.Core.Mvc6" Version="6.1.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -19,6 +20,22 @@
 
     <ItemGroup>
       <Content Update="Area\Identity\Account\Login.cshtml">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Views\TodoItems\Add.cshtml">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Views\Shared\_LoginPartial.cshtml">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Views\Shared\MvcGrid\_Grid.cshtml">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Views\Shared\MvcGrid\_Pager.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>

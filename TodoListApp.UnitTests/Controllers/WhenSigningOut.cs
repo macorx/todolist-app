@@ -1,11 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
 using TodoListApp.WebApp.Controllers;
 
-namespace TodoListApp.UnitTests
+namespace TodoListApp.UnitTests.Controllers
 {
     public class WhenSigningOut
     {

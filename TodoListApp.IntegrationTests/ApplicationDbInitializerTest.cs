@@ -1,31 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using TodoListApp.WebApp;
 
 namespace TodoListApp.IntegrationTests
 {
-    public class ApplicationDbInitializerTest
+    public class ApplicationDbInitializerTest : IntegrationTestBase
     {
-        private WebApplicationFactory<Startup> factory;
         private UserManager<IdentityUser> userManager;
-        private IServiceScope scope;
 
-        [SetUp]
-        public void Setup()
+        protected override void AdditionalSetup()
         {
-            factory = new WebApplicationFactory<Startup>();
-
-            scope = factory.Services.CreateScope();
-            userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            scope.Dispose();
+            userManager = ServiceProvider.GetService<UserManager<IdentityUser>>();
         }
 
         [TestCase("test")]
