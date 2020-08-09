@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using TodoListApp.WebApp.Controllers;
@@ -43,23 +44,23 @@ namespace TodoListApp.UnitTests.Controllers
         }
 
         [Test]
-        public void ReturnsToIndexAfterItemIsAdded()
+        public async Task ReturnsToIndexAfterItemIsAdded()
         {
             var newTodoItem = new NewTodoItemViewModel() { Description = "description" };
 
-            var result = controller.Add(newTodoItem);
+            var result = await controller.Add(newTodoItem);
 
             var redirectToAction = result.As<RedirectToActionResult>();
             Assert.That(redirectToAction.ActionName, Is.EqualTo("Index"));
         }
 
         [Test]
-        public void AndModelIsInvalidReturnsToViewWithErrors()
+        public async Task AndModelIsInvalidReturnsToViewWithErrors()
         {
             controller.ModelState.AddModelError("Description","Description is required");
 
             var viewModel = new NewTodoItemViewModel();
-            var result = controller.Add(viewModel);
+            var result = await controller.Add(viewModel);
 
             var viewResult = result.As<ViewResult>();
             var returnedViewModel = viewResult.Model.As<NewTodoItemViewModel>();

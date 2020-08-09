@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TodoListApp.WebApp.Data;
 using TodoListApp.WebApp.Models;
@@ -39,7 +38,6 @@ namespace TodoListApp.WebApp.Controllers
             await repository.Add(new TodoItem(CurrentUserId, newTodoItem.Description));
             
             return RedirectToAction("Index");
-        }           
-
+        }
     }
 }
