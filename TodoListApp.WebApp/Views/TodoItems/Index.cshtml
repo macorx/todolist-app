@@ -4,16 +4,68 @@
 }
 
 <a id="add" asp-action="Add" class="btn btn-primary">Add</a>
+<hr/>
 
-<hr />
 
-@(Html
-    .Grid(Model)
-    .Build(columns =>
-    {
-        columns.Add(model => model.IsComplete).Titled("Status").RenderedAs(model => model.IsComplete == true ? "Complete" : "Pending");        
-        columns.Add(model => model.Description).Titled("Description");
-        columns.Add(model => model.DateOfCreation).Titled("Created").Formatted("{0:dd/MM/yy hh:mm:ss}");
-        columns.Add(model => model.DateOfLastUpdate).Titled("Last Update").Formatted("{0:dd/MM/yy hh:mm:ss}");;
-    })
-    )
+@Html.AjaxGrid(Url.Action("IndexGrid"))
+
+
+@section Scripts {
+    <script>
+        async function requestDeletion(id) {
+            const url = '@Url.Action("Delete")/'+id;
+            return await fetch(url, { method: 'POST' });
+        }
+        
+        document.addEventListener('reloadend', function (e) {
+            const buttons = document.querySelectorAll("#grid button[data-target='delete']");
+            const confirmationModal = document.querySelector("#deleteModal");
+            const confirmButton = confirmationModal.querySelector("#deleteModal button#confirm");
+              
+              confirmButton.addEventListener('click', function() {
+                  const id = this.getAttribute('data-id');
+                  
+                  $(confirmationModal).modal('hide');
+                  
+                  requestDeletion(id)
+                      .then(response => {
+                          if (!response.ok)
+                              throw new Error("Couldn't delete todo item.");
+                          return response;
+                      })
+                      .then(_ => {
+                          const grid = new MvcGrid(document.querySelector('.mvc-grid'));
+                          grid.reload();
+                      })
+                      .catch(error => {
+                          console.log(error);
+                      });
+              });
+              
+              buttons.forEach(b => b.addEventListener("click", function(event) {
+                  const id = this.getAttribute('data-id');
+                  confirmButton.setAttribute('data-id', id);
+                  $(confirmationModal).modal('show');
+              }));
+        })        
+    </script>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete confirmation</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this task?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button id="confirm" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>    
+    </div>
+</div>
+

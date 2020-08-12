@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TodoListApp.WebApp.Data;
@@ -16,11 +17,17 @@ namespace TodoListApp.WebApp.Controllers
         {
             this.repository = repository;
         }
-
+        
         [HttpGet]
         public IActionResult Index()
         {
-            return View(repository.GetAll(CurrentUserId));
+            return View();
+        }          
+
+        [HttpGet]
+        public IActionResult IndexGrid()
+        {
+            return PartialView("_IndexGrid", repository.GetAll(CurrentUserId));
         }
 
         [HttpGet] 
@@ -39,5 +46,16 @@ namespace TodoListApp.WebApp.Controllers
             
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var todoItem = repository.GetAll(CurrentUserId).FirstOrDefault(t => t.Id == id);
+            if (todoItem != null)
+                await repository.Delete(todoItem);
+            
+            return new NoContentResult();
+        }
+      
     }
 }

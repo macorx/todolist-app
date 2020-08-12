@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -11,38 +12,56 @@ namespace TodoListApp.AcceptanceTests
         {
             AuthenticateWithDefaultUser();
         }
-
+        
         [Test]
         public void UserCanAddNewItem()
         {
-            const string description = "Review notes from last meeting.";
+            var creationTime = DateTime.Now;
+            var description = "Test item from " + creationTime.ToString("s");
             AddItemWithDescription(description);
 
-            var items = GetItems();
-            Assert.That(items.Length, Is.EqualTo(1));
-            var todoItem = items.First();
-
+            var todoItem = GetItemWithDescription(description);
+            Assert.IsNotNull(todoItem);
             Assert.That(todoItem.State, Is.EqualTo("Pending"));            
-            Assert.That(todoItem.Description, Is.EqualTo(description));            
-            Assert.That(todoItem.DateOfCreation, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(10)));
+            Assert.That(todoItem.DateOfCreation, Is.EqualTo(creationTime).Within(TimeSpan.FromSeconds(10)));
             Assert.IsNull(todoItem.DateOfLastUpdate);
         }
 
-        private TodoItem[] GetItems()
+        private TodoItem GetItemWithDescription(string description)
         {
-            var items = Driver.FindElements(By.CssSelector("table tbody tr"));
-            return items.Select(item => new TodoItem(items[0].FindElements(By.CssSelector("td")))).ToArray();
+            var itemIndex = 1;
+            foreach (var todoItem in Driver
+                .FindElements(By.CssSelector("table tbody tr"))
+                .Select(item => new TodoItem(itemIndex, item.FindElements(By.CssSelector("td")))))
+            {
+                if (todoItem.Description.Equals(description))
+                    return todoItem;
+                itemIndex++;
+            }
+            return default;
         }
 
         [Test]
         public void UserCanDeleteExistingItem()
         {
-            AddItemWithDescription("Delete me");
+            var currentCount = CountItems();
+            var description = "Test item from " + DateTime.Now.ToString("s");            
+            AddItemWithDescription(description);
             
-            ClickOnButton("delete");
-            Assert.That(CountItems(), Is.EqualTo(0));
+            var todoItem = GetItemWithDescription(description);
+
+            GetDeleteButtonFor(todoItem).Click();
+            ConfirmOperation();
+            
+            Assert.That(CountItems(), Is.EqualTo(currentCount));
         }
-        
+
+        private IWebElement GetDeleteButtonFor(TodoItem todoItem)
+        {
+            return Driver
+                .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({todoItem.Index}) button[data-target='delete']"));
+        }
+
         private int CountItems()
         {
             return Driver.FindElements(By.CssSelector("table tbody tr")).Count;            
@@ -53,7 +72,7 @@ namespace TodoListApp.AcceptanceTests
             ClickOnLink("add");
             
             FillInput("Description",description);
-            ClickOnButton("add");
+            ClickOnButtonWithId("add");
         }
     }
 }

@@ -24,6 +24,12 @@ namespace TodoListApp.UnitTests.Controllers
             currentUser = "e261aeb6-58c8-4057-bc64-7235e5ebd1fc";
             AssumeUserIdIsSignedIn(controller, currentUser);
         }
+
+        [Test]
+        public void ReturnsViewResult()
+        {
+            Assert.IsInstanceOf<ViewResult>(controller.Index());
+        }
         
         [Test]
         public void ReturnsTodoItemsFromUser()
@@ -31,7 +37,7 @@ namespace TodoListApp.UnitTests.Controllers
             var todoItems = GivenTodoItemsForUsers(currentUser);
             AssumeUserHasTodoItems(currentUser, todoItems);
 
-            var viewResult = controller.Index().As<ViewResult>();
+            var viewResult = controller.IndexGrid().As<PartialViewResult>();
             var viewModelItems = viewResult.Model.As<IQueryable<TodoItem>>().ToArray();
             Assert.That(viewModelItems.Count, Is.EqualTo(todoItems.Count));
             AssertTodoItem(viewModelItems[0], todoItems[0]);

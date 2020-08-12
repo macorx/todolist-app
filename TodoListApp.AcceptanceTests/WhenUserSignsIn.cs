@@ -5,13 +5,11 @@ namespace TodoListApp.AcceptanceTests
     public class WhenUserSignsIn : AcceptanceTestBase
     {
         [Test]
-        public void DisplaysUsersTodoListAndSignsOut()
+        public void UserCanSignOut()
         {
             AuthenticateWithDefaultUser();
 
-            Assert.That(Driver.Url, Is.EqualTo($"{BasePath}/"));
-
-            ClickOnButton("logout");
+            ClickOnButtonWithId("logout");
 
             Assert.That(Driver.Url, Is.EqualTo(LoginUrl));
         }

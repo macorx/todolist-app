@@ -10,6 +10,7 @@ namespace TodoListApp.IntegrationTests
         [TestCase("/Account/Login")]
         [TestCase("/Identity/Account/Login")]
         [TestCase("/TodoItems")]
+        [TestCase("/TodoItems/Add")]
         [TestCase("/")]
         public async Task ReturnsViewForUrl(string url)
         {

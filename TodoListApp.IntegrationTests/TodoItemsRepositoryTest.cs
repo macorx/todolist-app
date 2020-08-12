@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
 using TodoListApp.UnitTests;
 using TodoListApp.WebApp.Data;
 
@@ -27,7 +27,7 @@ namespace TodoListApp.IntegrationTests
         }
 
         [Test]
-        public void AddTodoItemForUser()
+        public async Task AddTodoItemForUser()
         {
             var description = "Send meeting notes to John";
             var isComplete = true;
@@ -39,7 +39,7 @@ namespace TodoListApp.IntegrationTests
             todoItem.SetProperty(nameof(TodoItem.DateOfCreation), dateOfCreation);
             todoItem.SetProperty(nameof(TodoItem.DateOfLastUpdate), dateOfLastUpdate);
             todoItem.SetProperty(nameof(TodoItem.IsComplete), isComplete);
-            repository.Add(todoItem);
+            await repository.Add(todoItem);
             
             var items = repository.GetAll(userId);
             
@@ -53,15 +53,27 @@ namespace TodoListApp.IntegrationTests
         }
 
         [Test]
-        public void ReturnsOnlyItemsFromUser()
+        public async Task ReturnsOnlyItemsFromUser()
         {
-            repository.Add(new TodoItem(userId, "userOne description"));
-            repository.Add(new TodoItem(otherUserId, "userTwo description"));
+            await repository.Add(new TodoItem(userId, "userOne description"));
+            await repository.Add(new TodoItem(otherUserId, "userTwo description"));
 
             var items = repository.GetAll(otherUserId).ToList();
             
             Assert.That(items.Count, Is.EqualTo(1));
             Assert.That(items[0].Description, Is.EqualTo("userTwo description"));
+        }
+
+        [Test]
+        public async Task DeletesTodoItem()
+        {
+            await repository.Add(new TodoItem(userId, "userOne description"));
+
+            var storedItem = repository.GetAll(userId).First();
+
+            await repository.Delete(storedItem);
+            
+            Assert.That(repository.GetAll(userId).Count, Is.EqualTo(0));
         }
     }
 }

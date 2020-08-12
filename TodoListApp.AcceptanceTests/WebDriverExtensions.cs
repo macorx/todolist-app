@@ -13,5 +13,11 @@ namespace TodoListApp.AcceptanceTests
             new WebDriverWait(driver, DefaultTimeout).Until(
                 d => ((IJavaScriptExecutor) d).ExecuteScript("return document.readyState").Equals("complete"));            
         }
+
+        public static void WaitUntilVisible(this IWebDriver driver, string elementId)
+        {
+            new WebDriverWait(driver, DefaultTimeout).Until(
+                d => d.FindElement(By.Id(elementId)) != null);
+        }
     }
 }

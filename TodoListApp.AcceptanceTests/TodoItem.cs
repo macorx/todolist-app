@@ -6,13 +6,15 @@ namespace TodoListApp.AcceptanceTests
 {
     public class TodoItem
     {
+        public int Index { get; }
         public DateTime DateOfCreation { get; } 
         public DateTime? DateOfLastUpdate { get; } 
         public string Description { get; }
         public string State { get; }
 
-        public TodoItem(ReadOnlyCollection<IWebElement> columns)
+        public TodoItem(int index, ReadOnlyCollection<IWebElement> columns)
         {
+            Index = index;
             State = columns[0].Text;
             Description = columns[1].Text;            
             DateOfCreation = DateTime.Parse(columns[2].Text);

@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 
@@ -32,20 +31,32 @@ namespace TodoListApp.AcceptanceTests
         {
             FillInput("UserName","test");
             FillInput("Password","pwd123");
-            ClickOnButton("login");
+            ClickOnButtonWithId("login");
             
             Driver.WaitUntilPageIsReady();
         }
 
         protected void FillInput(string id, string text)
         {
-            Driver.FindElement(By.Id(id)).SendKeys($"{text}");
+            Driver.FindElement(By.Id(id)).SendKeys(text);
         }
 
-        protected void ClickOnButton(string id)
+        protected void ClickOnButtonWithId(string id)
         {
             Driver.FindElement(By.Id(id)).Submit();            
         }
+        
+        protected void ConfirmOperation()
+        {
+            Driver.WaitUntilVisible("confirm");
+            Driver.FindElement(By.Id("confirm")).Click();
+        }
+        
+        protected void ClickOnButtonWithCssSelector(string cssSelector)
+        {
+            Driver.FindElement(By.CssSelector(cssSelector)).Submit();            
+        }
+        
         protected void ClickOnLink(string id)
         {
             Driver.FindElement(By.Id(id)).Click();           

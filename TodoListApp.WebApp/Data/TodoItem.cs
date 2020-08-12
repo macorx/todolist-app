@@ -11,7 +11,12 @@ namespace TodoListApp.WebApp.Data
         public bool IsComplete { get; protected set; }
         public DateTime DateOfCreation { get; protected set; }
         public DateTime? DateOfLastUpdate { get; protected set; }
-        public string Description { get; protected set; }        
+        public string Description { get; protected set; }
+
+        private TodoItem()
+        {
+            
+        }
         
         public TodoItem(string userId, string description)
         {
