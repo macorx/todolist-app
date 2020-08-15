@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using TodoListApp.AcceptanceTests.Pages;
 
 namespace TodoListApp.AcceptanceTests
 {
@@ -7,9 +8,9 @@ namespace TodoListApp.AcceptanceTests
         [Test]
         public void UserCanSignOut()
         {
-            AuthenticateWithDefaultUser();
-
-            ClickOnButtonWithId("logout");
+            var signedPage = SignIn();
+            
+            signedPage.SignOut();
 
             Assert.That(Driver.Url, Is.EqualTo(LoginUrl));
         }

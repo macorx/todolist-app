@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 
-namespace TodoListApp.AcceptanceTests
+namespace TodoListApp.AcceptanceTests.Pages
 {
     public class TodoItem
     {

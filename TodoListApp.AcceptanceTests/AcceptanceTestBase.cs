@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using TodoListApp.AcceptanceTests.Pages;
 
 namespace TodoListApp.AcceptanceTests
 {
@@ -8,7 +9,7 @@ namespace TodoListApp.AcceptanceTests
     {
         protected IWebDriver Driver { get; private set; }
 
-        protected const string BasePath = "https://localhost:5001";
+        private const string BasePath = "https://localhost:5001";
         protected readonly string LoginUrl = $"{BasePath}/Identity/Account/Login";
 
         [SetUp]
@@ -27,39 +28,12 @@ namespace TodoListApp.AcceptanceTests
             AdditionalSetup();
         }
 
-        protected void AuthenticateWithDefaultUser()
+        protected TodoListPage SignIn()
         {
-            FillInput("UserName","test");
-            FillInput("Password","pwd123");
-            ClickOnButtonWithId("login");
-            
-            Driver.WaitUntilPageIsReady();
-        }
-
-        protected void FillInput(string id, string text)
-        {
-            Driver.FindElement(By.Id(id)).SendKeys(text);
-        }
-
-        protected void ClickOnButtonWithId(string id)
-        {
-            Driver.FindElement(By.Id(id)).Submit();            
-        }
-        
-        protected void ConfirmOperation()
-        {
-            Driver.WaitUntilVisible("confirm");
-            Driver.FindElement(By.Id("confirm")).Click();
-        }
-        
-        protected void ClickOnButtonWithCssSelector(string cssSelector)
-        {
-            Driver.FindElement(By.CssSelector(cssSelector)).Submit();            
-        }
-        
-        protected void ClickOnLink(string id)
-        {
-            Driver.FindElement(By.Id(id)).Click();           
+            return new SignInPage(Driver)
+                .WithUserName("test")
+                .WithPassword("pwd123")
+                .SignIn();
         }
 
         protected virtual void AdditionalSetup()
