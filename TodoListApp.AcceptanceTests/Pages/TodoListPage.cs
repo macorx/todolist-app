@@ -17,6 +17,28 @@ namespace TodoListApp.AcceptanceTests.Pages
             Driver.FindElement(By.Id("add")).Click();
             return new AddPage(Driver);
         }
+        
+        public void DeleteItemWithDescription(string description)
+        {
+            var todoItem = GetItem(description);
+
+            Driver
+                .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({todoItem.Index}) button[data-target='delete']"))
+                .Click();
+            
+            ConfirmOperation();
+        }        
+        
+        public EditPage EditItemWithDescription(string description)
+        {
+            var todoItem = GetItem(description);
+            
+            Driver
+                .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({todoItem.Index}) a[data-target='edit']"))
+                .Click();
+            
+            return new EditPage(Driver);
+        }
 
         public TodoItem GetItem(string description)
         {
@@ -30,17 +52,6 @@ namespace TodoListApp.AcceptanceTests.Pages
                 itemIndex++;
             }
             return default;
-        }
-
-        public void DeleteItem(string description)
-        {
-            var todoItem = GetItem(description);
-            
-            Driver
-                .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({todoItem.Index}) button[data-target='delete']"))
-                .Click();
-            
-            ConfirmOperation();
         }
 
         private void ConfirmOperation()

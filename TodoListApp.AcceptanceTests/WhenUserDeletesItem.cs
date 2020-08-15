@@ -17,10 +17,10 @@ namespace TodoListApp.AcceptanceTests
         public void ItemsIsRemovedFromTodoList()
         {
             var currentCount = todoListPage.CountItems();
-            var description = "Test item from " + DateTime.Now.ToString("s");
+            var description = "Item " + DateTime.Now.ToString("s");
             AssumeExistingItemWithDescription(description);
 
-            todoListPage.DeleteItem(description);
+            todoListPage.DeleteItemWithDescription(description);
 
             Assert.That(todoListPage.CountItems(), Is.EqualTo(currentCount));
         }

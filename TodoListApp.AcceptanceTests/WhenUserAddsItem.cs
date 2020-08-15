@@ -17,7 +17,7 @@ namespace TodoListApp.AcceptanceTests
         public void NewItemIsDisplayedOnTodoList()
         {
             var creationTime = DateTime.Now;
-            var description = "Test item from " + creationTime.ToString("s");
+            var description = "Item " + creationTime.ToString("s");
             todoListPage.AddItem()
                 .WithDescription(description)
                 .Submit();
