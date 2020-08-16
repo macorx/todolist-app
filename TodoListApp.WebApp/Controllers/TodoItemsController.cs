@@ -56,6 +56,35 @@ namespace TodoListApp.WebApp.Controllers
             
             return new NoContentResult();
         }
-      
+
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            var item = repository.GetAll(CurrentUserId).FirstOrDefault(t => t.Id == id);
+            if (item == null)
+                return new NotFoundResult();
+            
+            var viewModel = new EditItemViewModel(item);
+            
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditItemViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+            
+            var item = repository.GetAll(CurrentUserId).FirstOrDefault(t => t.Id == viewModel.Id);
+            
+            if (item == null)
+                return new NotFoundResult();
+
+            viewModel.Update(item);
+
+            await repository.ApplyChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }

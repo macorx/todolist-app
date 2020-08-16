@@ -1,15 +1,23 @@
-﻿@model IQueryable<TodoListApp.WebApp.Data.TodoItem>
+﻿@using System.Text
+@model IQueryable<TodoListApp.WebApp.Data.TodoItem>
 
+@{
+    var modelIdToken = "{modelId}";
+    var actionsTemplate = new StringBuilder()
+        .AppendLine($"<a class='btn btn-secondary' href='TodoItems/Edit?id={modelIdToken}' data-target='edit'>Edit</a>")
+        .AppendLine($"<button class='btn btn-danger' data-target='delete' data-id='{modelIdToken}'>Delete</button>")
+        .ToString();
+}
 
 @(Html
     .Grid(Model)
     .Build(columns =>
     {
-        columns.Add(model => model.IsComplete).Titled("Status").RenderedAs(model => model.IsComplete == true ? "Complete" : "Pending");
+        columns.Add(model => model.IsDone).Titled("Status").RenderedAs(model => model.IsDone ? "Done" : "Pending");
         columns.Add(model => model.Description).Titled("Description");
         columns.Add(model => model.DateOfCreation).Titled("Created").Formatted("{0:dd/MM/yy HH:mm:ss}");
         columns.Add(model => model.DateOfLastUpdate).Titled("Last Update").Formatted("{0:dd/MM/yy HH:mm:ss}");;
-        columns.Add(model => "<button class='btn btn-danger' data-target='delete' data-id='" + model.Id + "'>Delete</button>").Encoded(false);
+        columns.Add(model => actionsTemplate.Replace(modelIdToken, model.Id)).Encoded(false).Titled("Actions");
     })
     .Id("grid")
     )

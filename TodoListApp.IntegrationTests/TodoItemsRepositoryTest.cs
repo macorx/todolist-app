@@ -30,7 +30,7 @@ namespace TodoListApp.IntegrationTests
         public async Task AddTodoItemForUser()
         {
             var description = "Send meeting notes to John";
-            var isComplete = true;
+            var isDone = true;
             var dateOfCreation = DateTime.Now;
             var dateOfLastUpdate = DateTime.Now.AddMinutes(10);
 
@@ -38,7 +38,7 @@ namespace TodoListApp.IntegrationTests
 
             todoItem.SetProperty(nameof(TodoItem.DateOfCreation), dateOfCreation);
             todoItem.SetProperty(nameof(TodoItem.DateOfLastUpdate), dateOfLastUpdate);
-            todoItem.SetProperty(nameof(TodoItem.IsComplete), isComplete);
+            todoItem.SetProperty(nameof(TodoItem.IsDone), isDone);
             await repository.Add(todoItem);
             
             var items = repository.GetAll(userId);
@@ -47,7 +47,7 @@ namespace TodoListApp.IntegrationTests
 
             var savedTodoItem = items.First();
             Assert.That(savedTodoItem.Description, Is.EqualTo(description));
-            Assert.That(savedTodoItem.IsComplete, Is.EqualTo(isComplete));
+            Assert.That(savedTodoItem.IsDone, Is.EqualTo(isDone));
             Assert.That(savedTodoItem.DateOfCreation, Is.EqualTo(dateOfCreation));
             Assert.That(savedTodoItem.DateOfLastUpdate, Is.EqualTo(dateOfLastUpdate));
         }
@@ -74,6 +74,24 @@ namespace TodoListApp.IntegrationTests
             await repository.Delete(storedItem);
             
             Assert.That(repository.GetAll(userId).Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task ApplyChanges()
+        {
+            await repository.Add(new TodoItem(userId, "userOne description"));
+
+            var item = repository.GetAll(userId).First();
+            item.IsDone = true;
+            
+            await repository.ApplyChanges();
+
+            using var newScope = Factory.Services.CreateScope();
+            
+            var newRepository = newScope.ServiceProvider.GetService<ITodoItemRepository>();
+            
+            var loadedItem = newRepository.GetAll(userId).First();
+            Assert.That(loadedItem.IsDone, Is.EqualTo(item.IsDone));
         }
     }
 }

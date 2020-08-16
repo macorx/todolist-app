@@ -15,7 +15,7 @@ namespace TodoListApp.UnitTests.Data
 
             Assert.That(item.Description, Is.EqualTo(description));
             Assert.That(item.UserId, Is.EqualTo(userId));
-            Assert.IsFalse(item.IsComplete);
+            Assert.IsFalse(item.IsDone);
             Assert.That(item.DateOfCreation, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(1)));
             Assert.IsNull(item.DateOfLastUpdate);
         }

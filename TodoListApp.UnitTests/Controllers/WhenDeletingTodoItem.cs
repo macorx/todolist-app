@@ -15,7 +15,6 @@ namespace TodoListApp.UnitTests.Controllers
         private TodoItemsController controller;
         private Mock<ITodoItemRepository> todoItemsRepository;
         private const string CurrentUser = "e261aeb6-58c8-4057-bc64-7235e5ebd1fc";
-        private const string OtherUser = "1d5fgsd-58c8-4057-bc64-7235e5ebd1fc";
         private const string ExistingTodoItemId = "75153d9d-5548-4de2-8c06-7175220d3d93";
 
         [SetUp]

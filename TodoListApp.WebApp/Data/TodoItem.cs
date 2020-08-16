@@ -8,10 +8,10 @@ namespace TodoListApp.WebApp.Data
         
         public string UserId { get; protected set; }
 
-        public bool IsComplete { get; protected set; }
+        public bool IsDone { get; set; }
         public DateTime DateOfCreation { get; protected set; }
-        public DateTime? DateOfLastUpdate { get; protected set; }
-        public string Description { get; protected set; }
+        public DateTime? DateOfLastUpdate { get; set; }
+        public string Description { get; set; }
 
         private TodoItem()
         {

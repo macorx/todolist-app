@@ -9,6 +9,7 @@ namespace TodoListApp.WebApp.Data
         IQueryable<TodoItem> GetAll(string userId);
         Task Add(TodoItem todoItem);
         Task Delete(TodoItem todoItem);
+        Task ApplyChanges();
     }
 
     public class TodoItemRepository : ITodoItemRepository
@@ -35,6 +36,11 @@ namespace TodoListApp.WebApp.Data
         {
             dbContext.TodoItems.Remove(todoItem);
 
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task ApplyChanges()
+        {
             await dbContext.SaveChangesAsync();
         }
     }

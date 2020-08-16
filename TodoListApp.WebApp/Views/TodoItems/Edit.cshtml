@@ -1,0 +1,32 @@
+﻿@model EditItemViewModel
+@{
+    ViewData["Title"] = "Edit item";
+}
+
+<h1>Add new item</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form id="addForm" method="post">
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="@Model.Description"></label>
+                    <input asp-for="@Model.Description" class="form-control" />
+                    <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                </div>
+                
+                <div class="form-check">
+                    <input asp-for="@Model.IsDone" class="form-check-input" />
+                    <label asp-for="@Model.IsDone" class="form-check-label"></label>
+                    <span asp-validation-for="@Model.IsDone" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <button id="save" type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

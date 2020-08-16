@@ -63,7 +63,7 @@ namespace TodoListApp.UnitTests.Controllers
         {
             Assert.That(viewModelItem.Id, Is.EqualTo(todoItem.Id));
             Assert.That(viewModelItem.Description, Is.EqualTo(todoItem.Description));
-            Assert.That(viewModelItem.IsComplete, Is.EqualTo(todoItem.IsComplete));
+            Assert.That(viewModelItem.IsDone, Is.EqualTo(todoItem.IsDone));
             Assert.That(viewModelItem.DateOfCreation, Is.EqualTo(todoItem.DateOfCreation));
             Assert.That(viewModelItem.DateOfLastUpdate, Is.EqualTo(todoItem.DateOfLastUpdate));
         }
