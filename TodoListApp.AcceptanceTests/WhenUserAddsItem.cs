@@ -8,11 +8,12 @@ namespace TodoListApp.AcceptanceTests
     {
         private TodoListPage todoListPage;
 
-        protected override void AdditionalSetup()
+        [SetUp]
+        public void SetUp()
         {
             todoListPage = SignIn();
         }
-        
+
         [Test]
         public void NewItemIsDisplayedOnTodoList()
         {
@@ -27,6 +28,12 @@ namespace TodoListApp.AcceptanceTests
             Assert.That(todoItem.State, Is.EqualTo("Pending"));            
             Assert.That(todoItem.DateOfCreation, Is.EqualTo(creationTime).Within(TimeSpan.FromSeconds(10)));
             Assert.IsNull(todoItem.DateOfLastUpdate);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            todoListPage.SignOut();
         }
     }
 }

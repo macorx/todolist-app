@@ -8,7 +8,8 @@ namespace TodoListApp.AcceptanceTests
     {
         private TodoListPage todoListPage;
 
-        protected override void AdditionalSetup()
+        [SetUp]
+        public void SetUp()
         {
             todoListPage = SignIn();
         }
@@ -30,12 +31,18 @@ namespace TodoListApp.AcceptanceTests
             Assert.That(todoItem.State, Is.EqualTo("Done"));
             Assert.That(todoItem.DateOfLastUpdate, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(3)));
         }
-        
+
         private void AssumeExistingItemWithDescription(string description)
         {
             todoListPage.AddItem()
                 .WithDescription(description)
                 .Submit();
-        }        
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            todoListPage.SignOut();
+        }
     }
 }

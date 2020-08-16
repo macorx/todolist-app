@@ -9,9 +9,10 @@ namespace TodoListApp.IntegrationTests
     {
         [TestCase("/Account/Login")]
         [TestCase("/Identity/Account/Login")]
+        [TestCase("/")]
         [TestCase("/TodoItems")]
         [TestCase("/TodoItems/Add")]
-        [TestCase("/")]
+        [TestCase("/TodoItems/Edit")]
         public async Task ReturnsViewForUrl(string url)
         {
             var client = Factory.CreateClient();

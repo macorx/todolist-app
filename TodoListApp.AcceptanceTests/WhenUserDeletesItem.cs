@@ -8,7 +8,8 @@ namespace TodoListApp.AcceptanceTests
     {
         private TodoListPage todoListPage;
 
-        protected override void AdditionalSetup()
+        [SetUp]
+        public void SetUp()
         {
             todoListPage = SignIn();
         }
@@ -30,6 +31,12 @@ namespace TodoListApp.AcceptanceTests
             todoListPage.AddItem()
                 .WithDescription(description)
                 .Submit();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            todoListPage.SignOut();
         }
     }
 }

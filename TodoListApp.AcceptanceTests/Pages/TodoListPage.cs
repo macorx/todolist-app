@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using OpenQA.Selenium;
 
 namespace TodoListApp.AcceptanceTests.Pages
@@ -26,7 +27,7 @@ namespace TodoListApp.AcceptanceTests.Pages
                 .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({todoItem.Index}) button[data-target='delete']"))
                 .Click();
             
-            ConfirmOperation();
+            Confirm();
         }        
         
         public EditPage EditItemWithDescription(string description)
@@ -54,10 +55,16 @@ namespace TodoListApp.AcceptanceTests.Pages
             return default;
         }
 
-        private void ConfirmOperation()
+        private void Confirm()
         {
-            Driver.WaitUntilVisible("confirm");
+            Driver.WaitUntilVisible(By.Id("deleteModal"));
+
+            // Modal is visible, however Bootstrap's modal state may not be ready to react to button click.
+            Thread.Sleep(500);
+
             Driver.FindElement(By.Id("confirm")).Click();
+            
+            Driver.WaitUntilInvisible(By.Id("deleteModal"));
         }
 
         public int CountItems()

@@ -11,7 +11,8 @@ namespace TodoListApp.AcceptanceTests.Pages
     {
         public static SignInPage SignOut(this ISignedPage page)
         {
-            page.Driver.FindElement(By.Id("logout")).Click();            
+            page.Driver.WaitUntilVisible(By.Id("logout")).Click();
+            
             return new SignInPage(page.Driver);
         }
         
