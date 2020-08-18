@@ -8,7 +8,6 @@ namespace TodoListApp.IntegrationTests
     public class StartupTest : IntegrationTestBase
     {
         [TestCase("/Account/Login")]
-        [TestCase("/Identity/Account/Login")]
         [TestCase("/")]
         [TestCase("/TodoItems")]
         [TestCase("/TodoItems/Add")]

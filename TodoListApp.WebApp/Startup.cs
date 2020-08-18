@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -19,11 +21,40 @@ namespace TodoListApp.WebApp
             
             services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 
-            // options => options.SignIn.RequireConfirmedAccount = true
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+                })
+                .AddCookie(IdentityConstants.TwoFactorUserIdScheme, o =>
+                {
+                    o.Cookie.Name = IdentityConstants.TwoFactorUserIdScheme;
+                    o.ExpireTimeSpan = System.TimeSpan.FromMinutes(5);
+                })
+                .AddCookie(IdentityConstants.ExternalScheme, o =>
+                {
+                    o.Cookie.Name = IdentityConstants.ExternalScheme;
+                    o.ExpireTimeSpan = System.TimeSpan.FromMinutes(5);
+                })
+                .AddCookie(IdentityConstants.ApplicationScheme, o =>
+                {
+                    o.LoginPath = new PathString("/Account/Login");
+                    o.LogoutPath = new PathString("/Account/Logout");
+                    o.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        context.Response.StatusCode = 403;
+                        return Task.CompletedTask;
+                    };
+                });
+            
             services
-                .AddDefaultIdentity<IdentityUser>()
+                .AddIdentityCore<IdentityUser>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddSignInManager()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             
             // Ignoring following rules for this test
             services.Configure<IdentityOptions>(opts => {
@@ -62,19 +93,12 @@ namespace TodoListApp.WebApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
-                // Asp.Net Core Identity follows the pattern Identity/Account/Login
-                endpoints
-                    .MapControllerRoute(
-                        name: "identity",
-                        defaults: new { controller = "Account", action = "Login" },
-                        pattern: "Identity/Account/Login");
-                
                 endpoints
                     .MapControllerRoute(
                     name: "default",

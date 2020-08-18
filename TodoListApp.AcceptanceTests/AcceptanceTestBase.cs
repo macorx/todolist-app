@@ -10,7 +10,7 @@ namespace TodoListApp.AcceptanceTests
         protected IWebDriver Driver => WebDriver.Instance;
 
         private const string BasePath = "https://localhost:5001";
-        protected readonly string LoginUrl = $"{BasePath}/Identity/Account/Login";
+        protected readonly string LoginUrl = $"{BasePath}/Account/Login";
         
         protected TodoListPage SignIn()
         {
