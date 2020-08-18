@@ -27,7 +27,7 @@ namespace TodoListApp.WebApp.Controllers
         [HttpGet]
         public IActionResult IndexGrid()
         {
-            return PartialView("_IndexGrid", repository.GetAll(CurrentUserId));
+            return PartialView("_IndexGrid", repository.GetAllForUser(CurrentUserId));
         }
 
         [HttpGet] 
@@ -50,7 +50,7 @@ namespace TodoListApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            var todoItem = repository.GetAll(CurrentUserId).FirstOrDefault(t => t.Id == id);
+            var todoItem = repository.GetAllForUser(CurrentUserId).FirstOrDefault(t => t.Id == id);
             if (todoItem != null)
                 await repository.Delete(todoItem);
             
@@ -60,7 +60,7 @@ namespace TodoListApp.WebApp.Controllers
         [HttpGet]
         public IActionResult Edit(string id)
         {
-            var item = repository.GetAll(CurrentUserId).FirstOrDefault(t => t.Id == id);
+            var item = repository.GetAllForUser(CurrentUserId).FirstOrDefault(t => t.Id == id);
             if (item == null)
                 return new NotFoundResult();
             
@@ -75,7 +75,7 @@ namespace TodoListApp.WebApp.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
             
-            var item = repository.GetAll(CurrentUserId).FirstOrDefault(t => t.Id == viewModel.Id);
+            var item = repository.GetAllForUser(CurrentUserId).FirstOrDefault(t => t.Id == viewModel.Id);
             
             if (item == null)
                 return new NotFoundResult();

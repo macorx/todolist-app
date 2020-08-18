@@ -41,7 +41,7 @@ namespace TodoListApp.IntegrationTests
             todoItem.SetProperty(nameof(TodoItem.IsDone), isDone);
             await repository.Add(todoItem);
             
-            var items = repository.GetAll(userId);
+            var items = repository.GetAllForUser(userId);
             
             Assert.That(items.Count(), Is.EqualTo(1));
 
@@ -58,10 +58,23 @@ namespace TodoListApp.IntegrationTests
             await repository.Add(new TodoItem(userId, "userOne description"));
             await repository.Add(new TodoItem(otherUserId, "userTwo description"));
 
-            var items = repository.GetAll(otherUserId).ToList();
+            var items = repository.GetAllForUser(otherUserId).ToList();
             
             Assert.That(items.Count, Is.EqualTo(1));
             Assert.That(items[0].Description, Is.EqualTo("userTwo description"));
+        }
+
+        [Test]
+        public async Task ReturnsAllItemsFromAllUsers()
+        {
+            await repository.Add(new TodoItem(userId, "userOne description"));
+            await repository.Add(new TodoItem(otherUserId, "userTwo description"));
+
+            var items = repository.GetAll().ToList();
+            
+            Assert.That(items.Count, Is.EqualTo(2));
+            Assert.That(items[0].Description, Is.EqualTo("userOne description"));
+            Assert.That(items[1].Description, Is.EqualTo("userTwo description"));
         }
 
         [Test]
@@ -69,11 +82,11 @@ namespace TodoListApp.IntegrationTests
         {
             await repository.Add(new TodoItem(userId, "userOne description"));
 
-            var storedItem = repository.GetAll(userId).First();
+            var storedItem = repository.GetAllForUser(userId).First();
 
             await repository.Delete(storedItem);
             
-            Assert.That(repository.GetAll(userId).Count, Is.EqualTo(0));
+            Assert.That(repository.GetAllForUser(userId).Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -81,7 +94,7 @@ namespace TodoListApp.IntegrationTests
         {
             await repository.Add(new TodoItem(userId, "userOne description"));
 
-            var item = repository.GetAll(userId).First();
+            var item = repository.GetAllForUser(userId).First();
             item.IsDone = true;
             
             await repository.ApplyChanges();
@@ -90,7 +103,7 @@ namespace TodoListApp.IntegrationTests
             
             var newRepository = newScope.ServiceProvider.GetService<ITodoItemRepository>();
             
-            var loadedItem = newRepository.GetAll(userId).First();
+            var loadedItem = newRepository.GetAllForUser(userId).First();
             Assert.That(loadedItem.IsDone, Is.EqualTo(item.IsDone));
         }
     }

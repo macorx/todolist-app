@@ -39,7 +39,7 @@ namespace TodoListApp.UnitTests.Controllers
                 .WithIsDone(isDone)
                 .Build();
 
-            todoItemsRepository.Setup(t => t.GetAll(currentUser))
+            todoItemsRepository.Setup(t => t.GetAllForUser(currentUser))
                 .Returns(new[] {todoItem}.AsQueryable());
 
             var viewResult = controller.Edit(id).As<ViewResult>();
@@ -53,7 +53,7 @@ namespace TodoListApp.UnitTests.Controllers
         [Test]
         public void ReturnsNotFoundWhenItemDoesNotExist()
         {
-            todoItemsRepository.Setup(t => t.GetAll(It.IsAny<string>()))
+            todoItemsRepository.Setup(t => t.GetAllForUser(It.IsAny<string>()))
                 .Returns(Enumerable.Empty<TodoItem>().AsQueryable());
 
             Assert.IsInstanceOf<NotFoundResult>(controller.Edit("invalid-id"));
@@ -66,7 +66,7 @@ namespace TodoListApp.UnitTests.Controllers
             var id = "0bea3da1-5e04-40c3-b949-22f7c25a6411bddb";            
             var viewModel = new EditItemViewModel() { Id = id, Description = "description" };            
             
-            todoItemsRepository.Setup(t => t.GetAll(It.IsAny<string>()))
+            todoItemsRepository.Setup(t => t.GetAllForUser(It.IsAny<string>()))
                 .Returns(Enumerable.Empty<TodoItem>().AsQueryable());
 
             Assert.IsInstanceOf<NotFoundResult>(await controller.Edit(viewModel));
@@ -105,7 +105,7 @@ namespace TodoListApp.UnitTests.Controllers
                 .WithIsDone(false)
                 .Build();
             
-            todoItemsRepository.Setup(r => r.GetAll(currentUser))
+            todoItemsRepository.Setup(r => r.GetAllForUser(currentUser))
                 .Returns(new[] { todoItem }.AsQueryable());
             
             controller.Edit(viewModel);
@@ -123,7 +123,7 @@ namespace TodoListApp.UnitTests.Controllers
             var id = "0bea3da1-5e04-40c3-b949-22f7c25a6411bddb";            
             var viewModel = new EditItemViewModel() { Id = id, Description = "description" };
             
-            todoItemsRepository.Setup(r => r.GetAll(currentUser))
+            todoItemsRepository.Setup(r => r.GetAllForUser(currentUser))
                 .Returns(new[] { new TodoItemBuilder().WithId(id).Build() }.AsQueryable());            
 
             var result = await controller.Edit(viewModel);

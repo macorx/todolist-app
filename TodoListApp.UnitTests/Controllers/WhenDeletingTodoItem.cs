@@ -39,7 +39,7 @@ namespace TodoListApp.UnitTests.Controllers
         
         private void AssumeExistingTodoItems(params TodoItem[] todoItems)
         {
-            todoItemsRepository.Setup(r => r.GetAll(CurrentUser))
+            todoItemsRepository.Setup(r => r.GetAllForUser(CurrentUser))
                 .Returns(todoItems.AsQueryable());
         }
 

@@ -55,7 +55,7 @@ namespace TodoListApp.UnitTests.Controllers
         
         private void AssumeUserHasTodoItems(string userId, List<TodoItem> todoItems)
         {
-            todoItemsRepository.Setup(t => t.GetAll(userId))
+            todoItemsRepository.Setup(t => t.GetAllForUser(userId))
                 .Returns(todoItems.AsQueryable());
         }        
 

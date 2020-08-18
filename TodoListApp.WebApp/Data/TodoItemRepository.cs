@@ -6,7 +6,8 @@ namespace TodoListApp.WebApp.Data
 {
     public interface ITodoItemRepository
     {
-        IQueryable<TodoItem> GetAll(string userId);
+        IQueryable<TodoItem> GetAllForUser(string userId);
+        IQueryable<TodoItem> GetAll();
         Task Add(TodoItem todoItem);
         Task Delete(TodoItem todoItem);
         Task ApplyChanges();
@@ -21,9 +22,14 @@ namespace TodoListApp.WebApp.Data
             this.dbContext = dbContext;
         }
         
-        public IQueryable<TodoItem> GetAll(string userId)
+        public IQueryable<TodoItem> GetAllForUser(string userId)
         {
             return dbContext.TodoItems.Where(t => t.UserId == userId).AsQueryable();
+        }
+
+        public IQueryable<TodoItem> GetAll()
+        {
+            return dbContext.TodoItems.AsQueryable();;
         }
 
         public async Task Add(TodoItem todoItem)
