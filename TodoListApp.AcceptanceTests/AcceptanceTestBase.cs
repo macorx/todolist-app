@@ -19,7 +19,7 @@ namespace TodoListApp.AcceptanceTests
             return new SignInPage(Driver)
                 .WithUserName("test")
                 .WithPassword("pwd123")
-                .SignIn();
+                .SignIn<TodoListPage>();
         }
 
     }

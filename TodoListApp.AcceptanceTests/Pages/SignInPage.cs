@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 
 namespace TodoListApp.AcceptanceTests.Pages
 {
@@ -23,10 +24,10 @@ namespace TodoListApp.AcceptanceTests.Pages
             return this;
         }
 
-        public TodoListPage SignIn()
+        public TPage SignIn<TPage>() where TPage : ISignedPage
         {
             Driver.FindElement(By.Id("login")).Submit();
-            return new TodoListPage(Driver);
+            return (TPage)Activator.CreateInstance(typeof(TPage), Driver);
         }
     }
 }
