@@ -26,23 +26,36 @@ namespace TodoListApp.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-            if (!ModelState.IsValid) return View(loginViewModel);
-            
-            var result =
-                await signInManager.PasswordSignInAsync(loginViewModel.UserName, loginViewModel.Password, false,
-                    false);
-            
-            if (result.Succeeded)
+            if (!ModelState.IsValid) 
+                return View(loginViewModel);
+
+            var user = await signInManager.UserManager.FindByNameAsync(loginViewModel.UserName);
+            if (user != null)
             {
-                if (!string.IsNullOrEmpty(loginViewModel.ReturnUrl) && Url.IsLocalUrl(loginViewModel.ReturnUrl))
-                    return Redirect(loginViewModel.ReturnUrl);
-                
-                return RedirectToAction("Index", "TodoItems"); 
+                var result = await signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+                if (result.Succeeded)
+                    return await RedirectAuthenticatedUser(loginViewModel, user);
             }
                 
             ModelState.AddModelError(string.Empty, "Couldn't login with user and password.");
 
             return View(loginViewModel);
+        }
+
+        private async Task<IActionResult> RedirectAuthenticatedUser(LoginViewModel loginViewModel, IdentityUser user)
+        {
+            if (!string.IsNullOrEmpty(loginViewModel.ReturnUrl) && Url.IsLocalUrl(loginViewModel.ReturnUrl))
+                return Redirect(loginViewModel.ReturnUrl);
+            
+            if (await IsAdmin(user))
+                return RedirectToAction("Index", "Admin");
+
+            return RedirectToAction("Index", "TodoItems");
+        }
+
+        private async Task<bool> IsAdmin(IdentityUser user)
+        {
+            return await signInManager.UserManager.IsInRoleAsync(user, "Admin");
         }
 
         [HttpPost]

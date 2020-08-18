@@ -9,7 +9,7 @@ namespace TodoListApp.UnitTests
 {
     public static class MockHelpers
     {
-        private static Mock<UserManager<IdentityUser>> ForUserManager()
+        public static Mock<UserManager<IdentityUser>> ForUserManager()
         {
             var store = new Mock<IUserStore<IdentityUser>>();
             var userManager = new Mock<UserManager<IdentityUser>>(store.Object, null, null, null, null, null, null, null, null);
@@ -20,7 +20,11 @@ namespace TodoListApp.UnitTests
 
         public static Mock<SignInManager<IdentityUser>> ForSignInManager()
         {
-            var userManager = ForUserManager();
+            return ForSignInManager(ForUserManager());
+        }
+
+        public static Mock<SignInManager<IdentityUser>> ForSignInManager(Mock<UserManager<IdentityUser>> userManager)
+        {
             var contextAccessor = new Mock<IHttpContextAccessor>();
             var claimsFactory = new Mock<IUserClaimsPrincipalFactory<IdentityUser>>();
             var optionsAccessor = new Mock<IOptions<IdentityOptions>>();
