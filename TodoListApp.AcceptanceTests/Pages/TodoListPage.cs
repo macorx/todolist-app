@@ -64,7 +64,7 @@ namespace TodoListApp.AcceptanceTests.Pages
 
             Driver.FindElement(By.Id("confirm")).Click();
             
-            Driver.WaitUntilInvisible(By.Id("deleteModal"));
+            Driver.WaitUntilInvisible(By.CssSelector("body > div.modal-backdrop"));
         }
 
         public int CountItems()
