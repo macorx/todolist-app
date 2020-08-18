@@ -16,6 +16,7 @@ namespace TodoListApp.IntegrationTests
 
         [TestCase("test")]
         [TestCase("test2")]
+        [TestCase("admin")]
         public async Task UserExists(string userName)
         {
             Assert.IsNotNull(await userManager.FindByNameAsync(userName));
@@ -23,6 +24,7 @@ namespace TodoListApp.IntegrationTests
         
         [TestCase("test", "User")]
         [TestCase("test2", "User")]
+        [TestCase("admin", "Admin")]
         public async Task UserIsInRole(string userName, string roleName)
         {
             var user = await userManager.FindByNameAsync(userName);

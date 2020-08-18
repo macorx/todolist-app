@@ -7,9 +7,12 @@ namespace TodoListApp.WebApp.Data
         public static void SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             const string userRole = "User";
+            const string adminRole = "Admin";
             
             AddRole(roleManager, userRole);
+            AddRole(roleManager, adminRole);
             
+            AddUser(userManager, "admin", "pwd123", adminRole);
             AddUser(userManager, "test", "pwd123", userRole);
             AddUser(userManager, "test2", "pwd123", userRole);
         }
