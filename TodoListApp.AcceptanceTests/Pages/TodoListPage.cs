@@ -55,6 +55,17 @@ namespace TodoListApp.AcceptanceTests.Pages
             return default;
         }
 
+        public TodoListPage DeleteAllItems()
+        {
+            foreach (var row in Driver.FindElements(By.CssSelector("table tbody tr")))
+            {
+                var description = row.FindElements(By.CssSelector("td"))[1].Text;
+                DeleteItemWithDescription(description);
+            }
+
+            return this;
+        }
+
         private void Confirm()
         {
             Driver.WaitUntilVisible(By.Id("deleteModal"));

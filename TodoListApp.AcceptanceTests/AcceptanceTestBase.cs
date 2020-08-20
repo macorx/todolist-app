@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+﻿using OpenQA.Selenium;
 using TodoListApp.AcceptanceTests.Pages;
 
 namespace TodoListApp.AcceptanceTests
@@ -12,13 +10,13 @@ namespace TodoListApp.AcceptanceTests
         private const string BasePath = "https://localhost:5001";
         protected readonly string LoginUrl = $"{BasePath}/Account/Login";
         
-        protected TodoListPage SignIn()
+        protected TodoListPage SignIn(string userName = "test", string password= "pwd123")
         {
             Driver.Navigate().GoToUrl(LoginUrl);
             
             return new SignInPage(Driver)
-                .WithUserName("test")
-                .WithPassword("pwd123")
+                .WithUserName(userName)
+                .WithPassword(password)
                 .SignIn<TodoListPage>();
         }
 
