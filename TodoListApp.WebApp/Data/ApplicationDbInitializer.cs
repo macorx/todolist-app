@@ -1,36 +1,42 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace TodoListApp.WebApp.Data
 {
     public static class ApplicationDbInitializer
     {
-        public static void SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             const string userRole = "User";
             const string adminRole = "Admin";
             
-            AddRole(roleManager, userRole);
-            AddRole(roleManager, adminRole);
+            await AddRole(roleManager, userRole);
+            await AddRole(roleManager, adminRole);
             
-            AddUser(userManager, "admin", "pwd123", adminRole);
-            AddUser(userManager, "test", "pwd123", userRole);
-            AddUser(userManager, "test2", "pwd123", userRole);
+            await AddUser(userManager, "admin", "pwd123", adminRole);
+            await AddUser(userManager, "test", "pwd123", userRole);
+            await AddUser(userManager, "test2", "pwd123", userRole);
         }
 
-        private static void AddRole(RoleManager<IdentityRole> roleManager, string roleName)
+        private static async Task AddRole(RoleManager<IdentityRole> roleManager, string roleName)
         {
-            roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
+            if (await roleManager.FindByNameAsync(roleName) != null)
+                return;
+            
+            await roleManager.CreateAsync(new IdentityRole(roleName));
         }
 
-        private static void AddUser(UserManager<IdentityUser> userManager, string userName, string password,
+        private static async Task AddUser(UserManager<IdentityUser> userManager, string userName, string password,
             string role)
         {
+            if (await userManager.FindByNameAsync(userName) != null)
+                return;
+            
             var user = new IdentityUser {UserName = userName};
-            userManager.CreateAsync(user, password).Wait();
-
+            await userManager.CreateAsync(user, password);
             // ignoring identity result checking since users are hardcoded.
 
-            userManager.AddToRoleAsync(user, role).Wait();
+            await userManager.AddToRoleAsync(user, role);
         }
     }
 }

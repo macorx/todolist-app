@@ -87,7 +87,7 @@ namespace TodoListApp.WebApp
                 app.UseHsts();
             }
             
-            ApplicationDbInitializer.SeedUsers(userManager, roleManager);
+            ApplicationDbInitializer.SeedUsers(userManager, roleManager).Wait();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
