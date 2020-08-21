@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
-using TodoListApp.WebApp;
 
 namespace TodoListApp.IntegrationTests
 {

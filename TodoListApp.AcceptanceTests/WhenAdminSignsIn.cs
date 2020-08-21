@@ -43,14 +43,14 @@ namespace TodoListApp.AcceptanceTests
         [Test]
         public void DisplaysTodoItemsPerUser()
         {
-            var expectedValues = new Dictionary<string, (int pending, int completed)>
+            var expectedValues = new Dictionary<string, (int pending, int done)>
             { {"test",(1,1)}, {"test2",(1,0)} };
             
             foreach (var (user, pending, done) in adminPage.GetItemsPerUser())
             {
                 CollectionAssert.Contains(expectedValues.Keys, user);
                 Assert.That(expectedValues[user].pending, Is.EqualTo(pending), $"{user} has {pending} pending items");
-                Assert.That(expectedValues[user].completed, Is.EqualTo(done), $"{user} has {done} pending items");
+                Assert.That(expectedValues[user].done, Is.EqualTo(done), $"{user} has {done} pending items");
             }
         }
 
@@ -61,15 +61,15 @@ namespace TodoListApp.AcceptanceTests
         }
 
         [Test]
-        public void DisplaysTotalPendingTasks()
+        public void DisplaysTotalPendingItems()
         {
-            Assert.That(adminPage.TotalPendingTasks, Is.EqualTo(2));            
+            Assert.That(adminPage.TotalPendingItems, Is.EqualTo(2));            
         }
 
         [Test]
-        public void DisplaysTotalCompletedTasks()
+        public void DisplaysTotalDoneItems()
         {
-            Assert.That(adminPage.TotalCompletedTasks, Is.EqualTo(1));            
+            Assert.That(adminPage.TotalDoneItems, Is.EqualTo(1));            
         }
 
         private AdminPage SignInAsAdmin()
