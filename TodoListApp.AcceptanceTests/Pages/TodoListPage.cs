@@ -22,14 +22,18 @@ namespace TodoListApp.AcceptanceTests.Pages
         public void DeleteItemWithDescription(string description)
         {
             var todoItem = GetItem(description);
+            DeleteItem(todoItem.Index);
+        }
 
+        private void DeleteItem(int itemRowIndex)
+        {
             Driver
-                .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({todoItem.Index}) button[data-target='delete']"))
+                .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({itemRowIndex}) button[data-target='delete']"))
                 .Click();
-            
+
             Confirm();
-        }        
-        
+        }
+
         public EditPage EditItemWithDescription(string description)
         {
             var todoItem = GetItem(description);
@@ -57,13 +61,22 @@ namespace TodoListApp.AcceptanceTests.Pages
 
         public TodoListPage DeleteAllItems()
         {
-            foreach (var row in Driver.FindElements(By.CssSelector("table tbody tr")))
-            {
-                var description = row.FindElements(By.CssSelector("td"))[1].Text;
-                DeleteItemWithDescription(description);
-            }
+            while (CountItems() > 0) 
+                DeleteItem(itemRowIndex: 1);
 
             return this;
+        }
+
+        private IWebElement GetGridRow()
+        {
+            try
+            {
+                return Driver.FindElement(By.CssSelector("table tbody tr"));
+            }
+            catch (NoSuchElementException e)
+            {
+                return null;
+            }
         }
 
         private void Confirm()
