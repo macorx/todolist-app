@@ -66,19 +66,7 @@ namespace TodoListApp.AcceptanceTests.Pages
 
             return this;
         }
-
-        private IWebElement GetGridRow()
-        {
-            try
-            {
-                return Driver.FindElement(By.CssSelector("table tbody tr"));
-            }
-            catch (NoSuchElementException e)
-            {
-                return null;
-            }
-        }
-
+        
         private void Confirm()
         {
             Driver.WaitUntilVisible(By.Id("deleteModal"));

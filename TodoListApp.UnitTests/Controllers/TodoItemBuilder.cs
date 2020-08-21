@@ -6,17 +6,9 @@ namespace TodoListApp.UnitTests.Controllers
     public class TodoItemBuilder
     {
         private string id;
-        private string userId;
+        private readonly string userId = "e40e5fb2-9887-495a-a4bc-910e492f7eb5";
         private string description;
         private bool? isDone;
-        private DateTime? dateOfCreation;
-        private DateTime? dateOfLastUpdate;
-
-        public TodoItemBuilder WithUserId(string userId)
-        {
-            this.userId = userId;
-            return this;
-        }
 
         public TodoItemBuilder WithDescription(string description)
         {
@@ -41,8 +33,6 @@ namespace TodoListApp.UnitTests.Controllers
             var todoItem = new TodoItem(userId, description);
             todoItem.SetPropertyIfValue(nameof(TodoItem.Id), id);
             todoItem.SetPropertyIfValue(nameof(TodoItem.IsDone), isDone);
-            todoItem.SetPropertyIfValue(nameof(TodoItem.IsDone), dateOfCreation);
-            todoItem.SetPropertyIfValue(nameof(TodoItem.IsDone), dateOfLastUpdate);
             return todoItem;
         }
     }
