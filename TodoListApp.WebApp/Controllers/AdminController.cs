@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,33 @@ namespace TodoListApp.WebApp.Controllers
             this.todoItemRepository = todoItemRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var users = (await userManager.GetUsersInRoleAsync("User"))
+                .Select(user => new {user.Id, user.UserName})
+                .ToArray();
+
+            var todoItems = todoItemRepository.GetAll()
+                .GroupBy(item => item.UserId)
+                .Select(t => new
+                {
+                    UserId = t.Key,
+                    Done = t.Count(i => i.IsDone),
+                    Pending = t.Count(i => !i.IsDone)
+                })
+                .ToArray();
+            
+            var userDetails = from user in users
+                join item in todoItems on user.Id equals item.UserId into gj
+                from todoItem in gj.DefaultIfEmpty(new { UserId = string.Empty, Done = 0, Pending = 0 })
+                select new UserDetailsViewModel {UserName = user.UserName, TotalDoneItems=todoItem.Done, TotalPendingItems=todoItem.Pending};
+            
             var adminViewModel = new AdminViewModel
             {
-                TotalUsers = userManager.Users.Count(),
-                TotalPendingTasks = todoItemRepository.GetAll().Count(t => !t.IsDone),
-                TotalCompletedTasks = todoItemRepository.GetAll().Count(t => t.IsDone),
+                TotalUsers = users.Count(),
+                TotalPendingItems = todoItems.Sum(item => item.Pending),
+                TotalDoneItems = todoItems.Sum(item => item.Done),
+                Users = userDetails.ToArray()
             };
             
             return View(adminViewModel);

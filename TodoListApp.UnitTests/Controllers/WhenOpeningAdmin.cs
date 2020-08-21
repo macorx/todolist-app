@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -38,36 +37,88 @@ namespace TodoListApp.UnitTests.Controllers
         }
         
         [Test]
-        public void ReturnsViewModelWithTotals()
+        public async Task ReturnsViewModelWithTotals()
         {
             const int totalUsers = 5;
-            AssumeExistingUsersCount(totalUsers);
+            var users = GivenExistingUsers(totalUsers);
 
-            var todoList = new List<TodoItem>();
-            todoList.AddRange(GivenUserHasTodoItems("userId", count: 4, done: true));
-            todoList.AddRange(GivenUserHasTodoItems("userId", count: 3, done: false));
-            todoList.AddRange(GivenUserHasTodoItems("userId2", count: 2, done: true));
-            todoList.AddRange(GivenUserHasTodoItems("userId2", count: 1, done: false));
-            todoItemRepository.Setup(r => r.GetAll()).Returns(todoList.AsQueryable());
+            AssumeExistingTodoItems(
+                GivenUserHasTodoItems(users[0].Id, done: 2, pending: 1),
+                GivenUserHasTodoItems(users[1].Id, done: 4, pending: 3));
 
-            var result = controller.Index();
+            var result = await controller.Index();
             
             var viewModel = result.As<ViewResult>().Model.As<AdminViewModel>();
             Assert.That(viewModel.TotalUsers, Is.EqualTo(totalUsers));
-            Assert.That(viewModel.TotalPendingTasks, Is.EqualTo(4));
-            Assert.That(viewModel.TotalCompletedTasks, Is.EqualTo(6));
+            Assert.That(viewModel.TotalDoneItems, Is.EqualTo(6));
+            Assert.That(viewModel.TotalPendingItems, Is.EqualTo(4));
         }
 
-        private IEnumerable<TodoItem> GivenUserHasTodoItems(string userId, int count, bool done)
+        [Test]
+        public async Task ReturnsViewModelWithUserDetails()
         {
-            return Enumerable.Range(0, count)
-                .Select(i => new TodoItem(userId, string.Empty) { IsDone = done });
+            var userOne = new IdentityUser("test");
+            var userTwo = new IdentityUser("test1");
+            var userThree = new IdentityUser("test2");
+            AssumeExistingUsers(userOne, userTwo, userThree);            
+            
+            AssumeExistingTodoItems(
+                GivenUserHasTodoItems(userOne.Id, done: 1, pending: 2),
+                GivenUserHasTodoItems(userTwo.Id, done: 3, pending: 4));
+
+            var result = await controller.Index();
+            
+            var adminViewModel = result.As<ViewResult>().Model.As<AdminViewModel>();
+            AssertUserDetails(adminViewModel, userOne, 1, 2);
+            AssertUserDetails(adminViewModel, userTwo, 3, 4);
+            AssertUserDetails(adminViewModel, userThree, 0, 0);
         }
 
-        private void AssumeExistingUsersCount(int totalUsers)
+        [Test]
+        public async Task GetsOnlyUsersWithRoleUser()
         {
-            userManager.Setup(u => u.Users)
-                .Returns(new IdentityUser[totalUsers].AsQueryable());
+            AssumeExistingUsers(new IdentityUser());                
+            
+            await controller.Index();
+            
+            userManager.Verify(u => u.GetUsersInRoleAsync("User"), Times.Once);
+        }
+
+        private static void AssertUserDetails(AdminViewModel viewModel, IdentityUser userOne, int doneItems, int pendingItems)
+        {
+            var userDetails = viewModel.Users.FirstOrDefault(u => u.UserName == userOne.UserName);
+            Assert.IsNotNull(userDetails);
+            Assert.That(userDetails.TotalDoneItems, Is.EqualTo(doneItems));
+            Assert.That(userDetails.TotalPendingItems, Is.EqualTo(pendingItems));
+        }
+
+        private void AssumeExistingTodoItems(params IEnumerable<TodoItem>[] todoItems)
+        {
+            var all = todoItems.SelectMany(list => list).ToArray();
+            todoItemRepository.Setup(r => r.GetAll()).Returns(all.AsQueryable());
+        }
+
+        private IEnumerable<TodoItem> GivenUserHasTodoItems(string userId, int done, int pending)
+        {
+            return Enumerable.Range(0, done).Select(i => new TodoItem(userId, string.Empty) { IsDone = true })
+                .Concat(Enumerable.Range(0, pending).Select(i => new TodoItem(userId, string.Empty) { IsDone = false }));
+        }
+
+        private IdentityUser[] GivenExistingUsers(int totalUsers)
+        {
+            var users = Enumerable
+                .Range(0, totalUsers)
+                .Select(i => new IdentityUser($"user{i}"))
+                .ToArray();
+            
+            AssumeExistingUsers(users);
+            return users;
+        }
+
+        private void AssumeExistingUsers(params IdentityUser[] users)
+        {
+            userManager.Setup(u => u.GetUsersInRoleAsync(It.IsAny<string>()))
+                .ReturnsAsync(users.ToList());
         }
     }
 }

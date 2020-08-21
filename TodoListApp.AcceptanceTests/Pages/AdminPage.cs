@@ -21,15 +21,15 @@ namespace TodoListApp.AcceptanceTests.Pages
             return int.Parse(Driver.FindElement(by).Text);
         }
 
-        public IEnumerable<(string user, int pending, int completed)> GetItemsPerUser()
+        public IEnumerable<(string user, int pending, int done)> GetItemsPerUser()
         {
-            var webElements = Driver.FindElements(By.CssSelector("ul li"));
+            var webElements = Driver.FindElements(By.CssSelector("ul#userDetails li"));
             foreach (var webElement in webElements)
             {
                 var user = webElement.FindElement(By.CssSelector("span.user")).Text;
                 var pending = int.Parse(webElement.FindElement(By.CssSelector("span.pending")).Text);
-                var completed = int.Parse(webElement.FindElement(By.CssSelector("span.completed")).Text);
-                yield return (user, pending, completed);
+                var done = int.Parse(webElement.FindElement(By.CssSelector("span.done")).Text);
+                yield return (user, pending, done);
             }
         }
     }

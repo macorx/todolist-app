@@ -3,6 +3,18 @@
 <h2>Statistics</h2>
 <p>
     Total users: <span id="totalUsers">@Model.TotalUsers</span><br/>
-    Pending tasks: <span id="totalPendingTasks">@Model.TotalPendingTasks</span><br/>
-    Completed tasks: <span id="totalCompletedTasks">@Model.TotalCompletedTasks</span><br/>
+    Pending tasks: <span id="totalPendingTasks">@Model.TotalPendingItems</span><br/>
+    Completed tasks: <span id="totalCompletedTasks">@Model.TotalDoneItems</span><br/>
 </p>
+
+
+<ul id="userDetails">
+@foreach (var user in Model.Users)
+{
+    <li>
+        User:<span class="user">@user.UserName</span>
+        Pending:<span class="pending">@user.TotalPendingItems</span>
+        Done:<span class="done">@user.TotalDoneItems</span>
+    </li>
+}
+</ul>
