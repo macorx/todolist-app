@@ -22,6 +22,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Run
-      run: nohup dotnet run --project TodoListApp.WebApp
+      run: nohup dotnet run --no-build --project TodoListApp.WebApp > /dev/null 2>&1 &
     - name: Test
       run: dotnet test --no-restore --verbosity normal
