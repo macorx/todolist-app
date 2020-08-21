@@ -22,6 +22,7 @@ namespace TodoListApp.AcceptanceTests
 
             // Not recommended to use flag AcceptInsecureCertificates. However, I decided to switch on the flag to save time.
             var options = new FirefoxOptions() {  AcceptInsecureCertificates = true };
+            options.AddArguments("--headless");            
 
             WebDriver.Instance = new FirefoxDriver(service, options);
             WebDriver.Instance.WaitUntilPageIsReady();
