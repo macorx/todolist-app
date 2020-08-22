@@ -24,4 +24,4 @@ jobs:
     - name: Run
       run: nohup dotnet run --no-build --project TodoListApp.WebApp > /dev/null 2>&1 &
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-build --verbosity normal
