@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
+using NUnit.Framework;
 using OpenQA.Selenium;
 
 namespace TodoListApp.AcceptanceTests.Pages
@@ -22,6 +23,8 @@ namespace TodoListApp.AcceptanceTests.Pages
         public void DeleteItemWithDescription(string description)
         {
             var todoItem = GetItem(description);
+            Assert.IsNotNull(todoItem, $"Couldn't find item with description: {description}.");
+            
             DeleteItem(todoItem.Index);
         }
 
@@ -37,6 +40,7 @@ namespace TodoListApp.AcceptanceTests.Pages
         public EditPage EditItemWithDescription(string description)
         {
             var todoItem = GetItem(description);
+            Assert.IsNotNull(todoItem, $"Couldn't find item with description: {description}.");
             
             Driver
                 .FindElement(By.CssSelector($"#grid table tbody tr:nth-of-type({todoItem.Index}) a[data-target='edit']"))
