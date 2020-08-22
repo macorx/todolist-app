@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.Threading;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using System.Globalization;
 
 namespace TodoListApp.AcceptanceTests
 {
@@ -17,6 +19,8 @@ namespace TodoListApp.AcceptanceTests
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-IE");
+            
             var service = FirefoxDriverService.CreateDefaultService();
             service.Host = "::1";
 
