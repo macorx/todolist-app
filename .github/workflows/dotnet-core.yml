@@ -24,6 +24,6 @@ jobs:
     - name: Run
       run: nohup dotnet run --no-build --project TodoListApp.WebApp > /dev/null 2>&1 &
     - name: Verify server is up
-      run: sleep 10 && ss -tupln && curl -k -I https://127.0.0.1:5001/Account/Login
+      run: sleep 10 && ss -tupln | grep :5001 && curl -k -I https://127.0.0.1:5001/Account/Login
     - name: Test
       run: dotnet test --no-restore
