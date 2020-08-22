@@ -22,6 +22,9 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Run
-      run: nohup dotnet run --no-build --project TodoListApp.WebApp > /dev/null 2>&1 &
+      run: |
+        nohup dotnet run --no-build --project TodoListApp.WebApp > /dev/null 2>&1 &
+        sleep 5 &&
+        curl -k -I https://localhost:5001/Account/Login
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-restore
