@@ -30,6 +30,7 @@ namespace TodoListApp.AcceptanceTests
 
             WebDriver.Instance = new FirefoxDriver(service, options);
             WebDriver.Instance.WaitUntilPageIsReady();
+            
         }
 
         [OneTimeTearDown]

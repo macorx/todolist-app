@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -7,6 +8,19 @@ namespace TodoListApp.AcceptanceTests
     public static class WebDriverExtensions
     {
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(2);
+        
+        
+        public static void TakeScreenshot(this IWebDriver driver, string testName)
+        {
+            var tmpPath = Path.Combine(Path.GetTempPath(), "Screenshots");
+            if (!Directory.Exists(tmpPath))
+                Directory.CreateDirectory(tmpPath);
+                    
+            var fullPath = Path.Combine(tmpPath, $"{testName}_{DateTime.Now:ddMMyyyyHHmm}.png");
+            
+            var ss = ((ITakesScreenshot)driver).GetScreenshot();
+            ss.SaveAsFile(fullPath);
+        }        
         
         public static void WaitUntilPageIsReady(this IWebDriver driver)
         {

@@ -30,8 +30,7 @@ namespace TodoListApp.AcceptanceTests
             Assert.IsNull(todoItem.DateOfLastUpdate);
         }
 
-        [TearDown]
-        public void TearDown()
+        protected override void AdditionalTearDown()
         {
             todoListPage.SignOut();
         }

@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using OpenQA.Selenium;
 using TodoListApp.AcceptanceTests.Pages;
 
 namespace TodoListApp.AcceptanceTests
@@ -20,5 +22,19 @@ namespace TodoListApp.AcceptanceTests
                 .SignIn<TodoListPage>();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            var testName = TestContext.CurrentContext.Test.Name;
+            var outcome = TestContext.CurrentContext.Result.Outcome;
+            if (outcome == ResultState.Failure || outcome == ResultState.Error)
+                Driver.TakeScreenshot(testName);
+            
+            AdditionalTearDown();
+        }
+
+        protected virtual void AdditionalTearDown()
+        {
+        }
     }
 }
