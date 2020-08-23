@@ -27,7 +27,7 @@ jobs:
       run: curl -k -I --retry 10 --retry-connrefused --retry-delay 6 https://localhost:5001/Account/Login
     - name: Test
       run: dotnet test --no-restore
-    - uses: actions/checkout@v2
+    - uses: actions/upload-artifact@v2
       if: failure()
       with:
         name: test_screenshots
