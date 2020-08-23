@@ -23,7 +23,14 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Run
       run: nohup dotnet run --project TodoListApp.WebApp > /dev/null 2>&1 &
-    - name: Check server is online
+    - name: Wait until server is up
       run: curl -k -I --retry 10 --retry-connrefused --retry-delay 6 https://localhost:5001/Account/Login
     - name: Test
       run: dotnet test --no-restore
+    - uses: actions/checkout@v2
+      if: failure()
+      with:
+        name: test_screenshots
+        path: /tmp/Screenshots/      
+      
+      
