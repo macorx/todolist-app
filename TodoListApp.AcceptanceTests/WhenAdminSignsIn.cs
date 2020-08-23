@@ -9,7 +9,7 @@ namespace TodoListApp.AcceptanceTests
         private AdminPage adminPage;
 
         [OneTimeSetUp]
-        public void SetUp()
+        public void OneTimeSetUp()
         {
             // test
             var todoListPage = SignIn(userName: "test");
@@ -35,7 +35,7 @@ namespace TodoListApp.AcceptanceTests
         }
 
         [OneTimeTearDown]
-        public void TearDown()
+        public void OneTimeTearDown()
         {
             adminPage.SignOut();
         }

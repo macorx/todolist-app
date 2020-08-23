@@ -39,8 +39,7 @@ namespace TodoListApp.AcceptanceTests
                 .Submit();
         }
 
-        [TearDown]
-        public void TearDown()
+        protected override void AdditionalTearDown()
         {
             todoListPage.SignOut();
         }
