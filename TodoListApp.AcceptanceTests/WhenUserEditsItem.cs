@@ -27,7 +27,7 @@ namespace TodoListApp.AcceptanceTests
                 .Submit();
 
             var todoItem = todoListPage.GetItem(newDescription);
-            Assert.IsNotNull(todoItem);
+            Assert.IsNotNull(todoItem, $"Couldn't find item with description: {description}.");
             Assert.That(todoItem.State, Is.EqualTo("Done"));
             Assert.That(todoItem.DateOfLastUpdate, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromSeconds(3)));
         }

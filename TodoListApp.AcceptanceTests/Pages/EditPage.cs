@@ -28,7 +28,8 @@ namespace TodoListApp.AcceptanceTests.Pages
 
         public TodoListPage Submit()
         {
-            Driver.FindElement(By.Id("save")).Submit();            
+            Driver.FindElement(By.Id("save")).Submit();
+            Driver.WaitUntilPageIsReady();
             return new TodoListPage(Driver);
         }
     }
